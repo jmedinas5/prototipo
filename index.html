@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediCare360 · Prototipo de Agendamiento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ===================== HEADER + PULSO DE PROGRESO ===================== -->
+  <header class="top">
+    <div class="brand">
+      <span class="brand-mark">+</span>
+      <span class="brand-name">MediCare<b>360</b></span>
+    </div>
+
+    <svg class="pulse" viewBox="0 0 640 60" preserveAspectRatio="none" aria-hidden="true">
+      <path class="pulse-track" d="M0 30 H120 L145 10 L165 50 L185 30 H260 L285 12 L305 48 L325 30 H400 L425 10 L445 50 L465 30 H540 L565 12 L585 48 L605 30 H640"/>
+      <path id="pulseFill" class="pulse-fill" d="M0 30 H120 L145 10 L165 50 L185 30 H260 L285 12 L305 48 L325 30 H400 L425 10 L445 50 L465 30 H540 L565 12 L585 48 L605 30 H640"/>
+    </svg>
+
+    <ol class="steps" id="steps">
+      <li data-step="1" class="active"><span>1</span>Acceso</li>
+      <li data-step="2"><span>2</span>Inicio</li>
+      <li data-step="3"><span>3</span>Especialidad</li>
+      <li data-step="4"><span>4</span>Confirmar</li>
+      <li data-step="5"><span>5</span>Seguimiento</li>
+    </ol>
+  </header>
+
+  <!-- ===================== MARCO DE TELÉFONO ===================== -->
+  <main class="phone-wrap">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="screen-area" id="screenArea">
+
+        <!-- PANTALLA 1: LOGIN -->
+        <section class="screen active" id="screen-1" data-title="Acceso">
+          <div class="s-inner center">
+            <div class="logo-badge">+</div>
+            <h1 class="serif">Bienvenida</h1>
+            <p class="muted">Ingresa tu cédula para continuar. María, tu información ya está guardada.</p>
+
+            <label class="field">
+              <span>Cédula</span>
+              <input type="text" value="0912345678" inputmode="numeric">
+            </label>
+            <label class="field">
+              <span>Clave</span>
+              <input type="password" value="••••••">
+            </label>
+
+            <button class="btn btn-primary" data-next="2">Ingresar</button>
+            <button class="btn btn-ghost" data-next="2">Entrar con huella</button>
+          </div>
+        </section>
+
+        <!-- PANTALLA 2: HOME / DASHBOARD -->
+        <section class="screen" id="screen-2" data-title="Inicio">
+          <div class="s-inner">
+            <p class="eyebrow">Hola,</p>
+            <h1 class="serif">María Luisa</h1>
+
+            <div class="grid-actions">
+              <button class="tile tile-accent" data-next="3">
+                <span class="tile-icon">📅</span>
+                <span>Agendar cita</span>
+              </button>
+              <button class="tile">
+                <span class="tile-icon">🧪</span>
+                <span>Ver resultados</span>
+              </button>
+              <button class="tile">
+                <span class="tile-icon">📋</span>
+                <span>Historial clínico</span>
+              </button>
+              <button class="tile">
+                <span class="tile-icon">💊</span>
+                <span>Mis medicamentos</span>
+              </button>
+            </div>
+
+            <div class="reminder-card">
+              <span class="dot dot-warn"></span>
+              <div>
+                <strong>Control mensual pendiente</strong>
+                <p class="muted small">Tu médico recomienda agendar antes del 15.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PANTALLA 3: ESPECIALIDAD + CHATBOT PRE-TRIAJE -->
+        <section class="screen" id="screen-3" data-title="Especialidad">
+          <div class="s-inner">
+            <button class="back" data-next="2">←</button>
+            <h1 class="serif small-h">Cuéntame qué sientes</h1>
+            <p class="muted">Nuestro asistente sugiere la especialidad adecuada.</p>
+
+            <div class="chat-bubble bot">
+              Hola María 👋 ¿qué molestia tienes hoy?
+            </div>
+
+            <label class="field">
+              <span>Describe tus síntomas</span>
+              <input type="text" id="symptomInput" placeholder="ej. dolor de rodilla al caminar" value="dolor de rodilla al caminar">
+            </label>
+            <button class="btn btn-secondary" id="askBot">Preguntar al asistente</button>
+
+            <div class="chat-bubble bot suggestion" id="botSuggestion">
+              Según tus síntomas, te recomiendo <b>Traumatología</b>. Estos son los horarios disponibles esta semana:
+            </div>
+
+            <div class="slot-list" id="slotList">
+              <button class="slot" data-day="Mar 09" data-hour="09:30">Mar 09 · 09:30</button>
+              <button class="slot" data-day="Mar 09" data-hour="15:00">Mar 09 · 15:00</button>
+              <button class="slot" data-day="Mié 10" data-hour="11:00">Mié 10 · 11:00</button>
+            </div>
+
+            <button class="btn btn-primary" id="toConfirm" disabled data-next="4">Continuar</button>
+          </div>
+        </section>
+
+        <!-- PANTALLA 4: CONFIRMACIÓN -->
+        <section class="screen" id="screen-4" data-title="Confirmar">
+          <div class="s-inner">
+            <button class="back" data-next="3">←</button>
+            <h1 class="serif small-h">Confirma tu cita</h1>
+
+            <div class="summary-card">
+              <div class="summary-row"><span>Paciente</span><b>María Luisa Ramírez</b></div>
+              <div class="summary-row"><span>Especialidad</span><b>Traumatología</b></div>
+              <div class="summary-row"><span>Médico</span><b>Dr. Andrés Mendoza</b></div>
+              <div class="summary-row"><span>Fecha</span><b id="sumDay">Mar 09</b></div>
+              <div class="summary-row"><span>Hora</span><b id="sumHour">09:30</b></div>
+            </div>
+
+            <label class="check-row">
+              <input type="checkbox" checked>
+              <span>Enviarme recordatorio 24h y 1h antes</span>
+            </label>
+
+            <button class="btn btn-primary" data-next="5">Confirmar cita</button>
+          </div>
+        </section>
+
+        <!-- PANTALLA 5: SEGUIMIENTO / NOTIFICACIÓN -->
+        <section class="screen" id="screen-5" data-title="Seguimiento">
+          <div class="s-inner center">
+            <div class="check-badge">✓</div>
+            <h1 class="serif">¡Cita confirmada!</h1>
+            <p class="muted">Recibirás un recordatorio automático antes de tu consulta. Puedes verla en cualquier momento.</p>
+
+            <div class="notif-card">
+              <span class="dot dot-ok"></span>
+              <div>
+                <strong>Traumatología · Dr. Mendoza</strong>
+                <p class="muted small"><span id="finalDay">Mar 09</span> · <span id="finalHour">09:30</span></p>
+              </div>
+            </div>
+
+            <div class="notif-card ghost">
+              <span class="dot dot-info"></span>
+              <div>
+                <strong>Resultados de laboratorio</strong>
+                <p class="muted small">Disponibles para descarga desde hoy.</p>
+              </div>
+            </div>
+
+            <button class="btn btn-ghost" data-next="2">Volver al inicio</button>
+          </div>
+        </section>
+
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+
+    <p class="hint">Prototipo de interfaz — Grupo N° 7 · Interfaces y Multimedia · MediCare360</p>
+  </main>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
